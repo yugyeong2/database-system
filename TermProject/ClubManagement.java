@@ -317,5 +317,30 @@ public class ClubManagement {
         }
     }
 
+    public static void insertProject(Connection con, Scanner scanner) {
+        System.out.print("Enter project name: ");
+        String projectName = scanner.nextLine();
+        System.out.print("Enter GitHub URL: ");
+        String gitHubURL = scanner.nextLine();
+        System.out.print("Enter deadline (YYYY-MM-DD): ");
+        String deadline = scanner.nextLine();
+        System.out.print("Enter status (Planned/Ongoing/Completed): ");
+        String status = scanner.nextLine();
+
+        String query = "INSERT INTO Project (ProjectName, GitHub, Deadline, Status) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, projectName);
+            pstmt.setString(2, gitHubURL);
+            pstmt.setDate(3, Date.valueOf(deadline));
+            pstmt.setString(4, status);
+            pstmt.executeUpdate();
+            System.out.println("Project inserted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error inserting project: " + e.getMessage());
+        }
+    }
+
+
 
 }
