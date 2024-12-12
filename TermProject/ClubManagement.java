@@ -15,10 +15,32 @@ public class ClubManagement {
 
             while (!exit) {
                 System.out.println("\nMenu:");
-                System.out.println("1. Connect to Database");
-                System.out.println("2. Find Club Information");
-                System.out.println("3. Insert New Club");
-                System.out.println("4. Exit");
+                System.out.println("1. Init Database");
+                System.out.println("2. Connect to Database");
+
+                System.out.println("3. Find Student");
+                System.out.println("4. Find Professor");
+                System.out.println("5. Find Club");
+
+                System.out.println("6. Insert Student");
+                System.out.println("7. Insert Professor");
+                System.out.println("8. Insert Club");
+                System.out.println("9. Insert Student to Club");
+                System.out.println("10. Insert Project");
+
+                System.out.println("11. Update Student");
+                System.out.println("12. Update Professor");
+                System.out.println("13. Update Club");
+                System.out.println("14. Update Project");
+
+                System.out.println("15. Delete Student");
+                System.out.println("16. Delete Professor");
+                System.out.println("17. Delete Club");
+                System.out.println("18. Delete Project");
+
+                System.out.println("19. Matching Project with Student");
+
+                System.out.println("20. Exit");
                 System.out.print("Choose an option: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // consume newline
