@@ -180,4 +180,25 @@ public class ClubManagement {
             System.out.println("Error finding student: " + e.getMessage());
         }
     }
+
+    public static void findProfessor(Connection con, Scanner scanner) {
+        System.out.print("Enter professor name: ");
+        String professorName = scanner.nextLine();
+        String query = "SELECT * FROM Professor WHERE Name = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, professorName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("ProfessorID: %d, Name: %s, ResearchField: %s, Office: %s\n",
+                        rs.getInt("ProfessorID"), rs.getString("Name"), rs.getString("ResearchField"),
+                        rs.getString("Office"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding professor: " + e.getMessage());
+        }
+    }
+
+
 }
