@@ -80,19 +80,85 @@ public class ClubManagement {
         }
     }
 
-    private static void findClub(Connection con) {
-        String query = "SELECT * FROM Club";
-        try (Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            System.out.println("\nClubs:");
-            while (rs.next()) {
-                System.out.println(rs.getInt("ClubID") + " | " +
-                                   rs.getString("ClubName") + " | " +
-                                   rs.getDate("EstablishedDate"));
-            }
+    public static void initDatabase(Connection con) {
+        try (Statement stmt = con.createStatement()) {
+            String createTables = """
+                CREATE TABLE IF NOT EXISTS User (
+                    UserID INT AUTO_INCREMENT PRIMARY KEY,
+                    Name VARCHAR(100) NOT NULL,
+                    Age INT NOT NULL,
+                    Gender ENUM('Male', 'Female', 'Other') NOT NULL,
+                    Email VARCHAR(100) UNIQUE NOT NULL,
+                    Password VARCHAR(255) NOT NULL,
+                    PhoneNumber VARCHAR(15)
+                );
+                CREATE TABLE IF NOT EXISTS Club (
+                    ClubID INT AUTO_INCREMENT PRIMARY KEY,
+                    ClubName VARCHAR(100) NOT NULL,
+                    ClubRoom VARCHAR(100)
+                );
+                CREATE TABLE IF NOT EXISTS Student (
+                    StudentID INT AUTO_INCREMENT PRIMARY KEY,
+                    UserID INT UNIQUE NOT NULL,
+                    ClubID INT,
+                    Status ENUM('Active', 'Inactive') NOT NULL,
+                    Major VARCHAR(100),
+                    Semester INT,
+                    GradeAverage DECIMAL(3, 2),
+                    FOREIGN KEY (UserID) REFERENCES User(UserID),
+                    FOREIGN KEY (ClubID) REFERENCES Club(ClubID)
+                );
+                CREATE TABLE IF NOT EXISTS Professor (
+                    ProfessorID INT AUTO_INCREMENT PRIMARY KEY,
+                    UserID INT UNIQUE NOT NULL,
+                    ResearchField VARCHAR(100),
+                    Office VARCHAR(100),
+                    FOREIGN KEY (UserID) REFERENCES User(UserID)
+                );
+                CREATE TABLE IF NOT EXISTS ClubAdvisors (
+                    ClubID INT PRIMARY KEY,
+                    ProfessorID INT UNIQUE,
+                    FOREIGN KEY (ClubID) REFERENCES Club(ClubID),
+                    FOREIGN KEY (ProfessorID) REFERENCES Professor(ProfessorID)
+                );
+                CREATE TABLE IF NOT EXISTS Project (
+                    ProjectID INT AUTO_INCREMENT PRIMARY KEY,
+                    ProjectName VARCHAR(100) NOT NULL,
+                    GitHub VARCHAR(255),
+                    Deadline DATE,
+                    Status ENUM('Planned', 'Ongoing', 'Completed')
+                );
+                CREATE TABLE IF NOT EXISTS ClubProjects (
+                    ClubID INT NOT NULL,
+                    ProjectID INT NOT NULL,
+                    PRIMARY KEY (ClubID, ProjectID),
+                    FOREIGN KEY (ClubID) REFERENCES Club(ClubID),
+                    FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID)
+                );
+                CREATE TABLE IF NOT EXISTS Skill (
+                    SkillID INT AUTO_INCREMENT PRIMARY KEY,
+                    Field VARCHAR(100) NOT NULL,
+                    ProgrammingLanguage VARCHAR(100) NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS StudentSkills (
+                    StudentID INT NOT NULL,
+                    SkillID INT NOT NULL,
+                    PRIMARY KEY (StudentID, SkillID),
+                    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+                    FOREIGN KEY (SkillID) REFERENCES Skill(SkillID)
+                );
+                CREATE TABLE IF NOT EXISTS ProjectSkills (
+                    ProjectID INT NOT NULL,
+                    SkillID INT NOT NULL,
+                    PRIMARY KEY (ProjectID, SkillID),
+                    FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID),
+                    FOREIGN KEY (SkillID) REFERENCES Skill(SkillID)
+                );
+            """;
+            stmt.execute(createTables);
+            System.out.println("Database initialized successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Failed to initialize database: " + e.getMessage());
         }
     }
 
