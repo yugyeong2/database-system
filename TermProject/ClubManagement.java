@@ -200,5 +200,24 @@ public class ClubManagement {
         }
     }
 
+    public static void findClub(Connection con, Scanner scanner) {
+        System.out.print("Enter club name: ");
+        String clubName = scanner.nextLine();
+        String query = "SELECT * FROM Club WHERE ClubName = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, clubName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("ClubID: %d, ClubName: %s, ClubRoom: %s\n",
+                        rs.getInt("ClubID"), rs.getString("ClubName"), rs.getString("ClubRoom"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding club: " + e.getMessage());
+        }
+    }
+
+
 
 }
