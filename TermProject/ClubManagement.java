@@ -372,4 +372,21 @@ public class ClubManagement {
         }
     }
 
+    public static void deleteClub(Connection con, Scanner scanner) {
+        System.out.print("Enter club ID to delete: ");
+        int clubID = scanner.nextInt();
+        scanner.nextLine();
+
+        String query = "DELETE FROM Club WHERE ClubID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, clubID);
+            pstmt.executeUpdate();
+            System.out.println("Club deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting club: " + e.getMessage());
+        }
+    }
+
+
+
 }
