@@ -46,10 +46,32 @@ public class ClubManagement {
                 scanner.nextLine(); // consume newline
 
                 switch (choice) {
-                    case 1 -> System.out.println("Connection Successful.");
-                    case 2 -> findClub(con);
-                    case 3 -> insertClub(con, scanner);
-                    case 4 -> exit = true;
+                    case 1 -> initDatabase(con);
+                    case 2 -> System.out.println("Database connected.");
+
+                    case 3 -> findStudent(con, scanner);
+                    case 4 -> findProfessor(con, scanner);
+                    case 5 -> findClub(con, scanner);
+
+                    case 6 -> insertStudent(con, scanner);
+                    case 7 -> insertProfessor(con, scanner);
+                    case 8 -> insertClub(con, scanner);
+                    case 9 -> insertStudentToClub(con, scanner);
+                    case 10 -> insertProject(con, scanner);
+
+                    case 11 -> updateStudent(con, scanner);
+                    case 12 -> updateProfessor(con, scanner);
+                    case 13 -> updateClub(con, scanner);
+                    case 14 -> updateProject(con, scanner);
+
+                    case 15 -> deleteStudent(con, scanner);
+                    case 16 -> deleteProfessor(con, scanner);
+                    case 17 -> deleteClub(con, scanner);
+                    case 18 -> deleteProject(con, scanner);
+
+                    case 19 -> matchProjectWithStudent(con, scanner);
+
+                    case 20 -> exit = true;
                     default -> System.out.println("Invalid choice.");
                 }
             }
