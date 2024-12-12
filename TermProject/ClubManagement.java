@@ -162,20 +162,22 @@ public class ClubManagement {
         }
     }
 
-    private static void insertClub(Connection con, Scanner scanner) {
-        System.out.print("Enter Club Name: ");
-        String clubName = scanner.nextLine();
-        System.out.print("Enter Established Date (YYYY-MM-DD): ");
-        String establishedDate = scanner.nextLine();
+    public static void findStudent(Connection con, Scanner scanner) {
+        System.out.print("Enter student name: ");
+        String studentName = scanner.nextLine();
+        String query = "SELECT * FROM Student WHERE Name = ?";
 
-        String query = "INSERT INTO Club (ClubName, EstablishedDate) VALUES (?, ?)";
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
-            pstmt.setString(1, clubName);
-            pstmt.setDate(2, Date.valueOf(establishedDate));
-            pstmt.executeUpdate();
-            System.out.println("Club added successfully.");
+            pstmt.setString(1, studentName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("StudentID: %d, Name: %s, Age: %d, Major: %s, Status: %s\n",
+                        rs.getInt("StudentID"), rs.getString("Name"), rs.getInt("Age"),
+                        rs.getString("Major"), rs.getString("Status"));
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error finding student: " + e.getMessage());
         }
     }
 }
