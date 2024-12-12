@@ -499,4 +499,46 @@ public class ClubManagement {
         }
     }
 
+
+    public static void matchProjectWithStudent(Connection con, Scanner scanner) {
+        System.out.print("Enter project ID: ");
+        int projectID = scanner.nextInt();
+        scanner.nextLine();
+
+        String projectSkillsQuery = "SELECT SkillID FROM ProjectSkills WHERE ProjectID = ?";
+        String matchingStudentsQuery = """
+        SELECT DISTINCT s.StudentID, s.Name, s.Major
+        FROM Student s
+        JOIN StudentSkills ss ON s.StudentID = ss.StudentID
+        WHERE ss.SkillID = ?
+    """;
+
+        try (PreparedStatement projectStmt = con.prepareStatement(projectSkillsQuery);
+             PreparedStatement studentStmt = con.prepareStatement(matchingStudentsQuery)) {
+
+            projectStmt.setInt(1, projectID);
+            ResultSet projectSkills = projectStmt.executeQuery();
+
+            while (projectSkills.next()) {
+                int skillID = projectSkills.getInt("SkillID");
+                studentStmt.setInt(1, skillID);
+                ResultSet students = studentStmt.executeQuery();
+
+                System.out.println("Matching students for skill ID " + skillID + ":");
+                while (students.next()) {
+                    System.out.printf("StudentID: %d, Name: %s, Major: %s%n",
+                            students.getInt("StudentID"),
+                            students.getString("Name"),
+                            students.getString("Major"));
+                    System.out.print("Add this student to project? (yes/no): ");
+                    String choice = scanner.nextLine();
+                    if (choice.equalsIgnoreCase("yes")) {
+                        addStudentToProject(con, projectID, students.getInt("StudentID"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error matching project with students: " + e.getMessage());
+        }
+    }
 }
