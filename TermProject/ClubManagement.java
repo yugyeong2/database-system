@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 public class ClubManagement {
     public static void main(String[] args) {
-        String url = "jdbc:mysql://<IP>:<PORT>/ClubManagement";
-        String user = "<USERNAME>";
-        String password = "<PASSWORD>";
+        String url = "jdbc:mysql://192.168.56.104:4567/madang";
+        String user = "yugyeongpark";
+        String password = "1234";
 
         try (Connection con = DriverManager.getConnection(url, user, password);
              Scanner scanner = new Scanner(System.in)) {
