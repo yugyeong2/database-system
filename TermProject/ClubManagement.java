@@ -449,5 +449,26 @@ public class ClubManagement {
         }
     }
 
+    public static void updateClub(Connection con, Scanner scanner) {
+        System.out.print("Enter club ID to update: ");
+        int clubID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter new club name (leave blank to skip): ");
+        String clubName = scanner.nextLine();
+        System.out.print("Enter new club room (leave blank to skip): ");
+        String clubRoom = scanner.nextLine();
+
+        String query = "UPDATE Club SET ClubName = COALESCE(?, ClubName), ClubRoom = COALESCE(?, ClubRoom) WHERE ClubID = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, clubName.isEmpty() ? null : clubName);
+            pstmt.setString(2, clubRoom.isEmpty() ? null : clubRoom);
+            pstmt.setInt(3, clubID);
+            pstmt.executeUpdate();
+            System.out.println("Club information updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating club: " + e.getMessage());
+        }
+    }
 
 }
