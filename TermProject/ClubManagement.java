@@ -218,6 +218,39 @@ public class ClubManagement {
         }
     }
 
+    public static void insertStudent(Connection con, Scanner scanner) {
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        System.out.print("Enter gender (Male/Female/Other): ");
+        String gender = scanner.nextLine();
+        System.out.print("Enter major: ");
+        String major = scanner.nextLine();
+        System.out.print("Enter semester: ");
+        int semester = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        System.out.print("Enter grade average: ");
+        double gradeAverage = scanner.nextDouble();
+        scanner.nextLine(); // consume newline
+
+        String query = "INSERT INTO Student (Name, Age, Gender, Major, Semester, GradeAverage) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, age);
+            pstmt.setString(3, gender);
+            pstmt.setString(4, major);
+            pstmt.setInt(5, semester);
+            pstmt.setDouble(6, gradeAverage);
+            pstmt.executeUpdate();
+            System.out.println("Student inserted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error inserting student: " + e.getMessage());
+        }
+    }
+
 
 
 }
