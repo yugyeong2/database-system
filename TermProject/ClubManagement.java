@@ -402,5 +402,30 @@ public class ClubManagement {
         }
     }
 
+    public static void updateStudent(Connection con, Scanner scanner) {
+        System.out.print("Enter student ID to update: ");
+        int studentID = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        System.out.print("Enter new major (leave blank to skip): ");
+        String major = scanner.nextLine();
+        System.out.print("Enter new semester (leave blank to skip): ");
+        String semesterStr = scanner.nextLine();
+        System.out.print("Enter new grade average (leave blank to skip): ");
+        String gradeAverageStr = scanner.nextLine();
+
+        String query = "UPDATE Student SET Major = COALESCE(?, Major), Semester = COALESCE(?, Semester), GradeAverage = COALESCE(?, GradeAverage) WHERE StudentID = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, major.isEmpty() ? null : major);
+            pstmt.setObject(2, semesterStr.isEmpty() ? null : Integer.parseInt(semesterStr));
+            pstmt.setObject(3, gradeAverageStr.isEmpty() ? null : Double.parseDouble(gradeAverageStr));
+            pstmt.setInt(4, studentID);
+            pstmt.executeUpdate();
+            System.out.println("Student information updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating student: " + e.getMessage());
+        }
+    }
+
 
 }
