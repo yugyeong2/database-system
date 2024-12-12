@@ -297,6 +297,25 @@ public class ClubManagement {
         }
     }
 
+    public static void insertStudentToClub(Connection con, Scanner scanner) {
+        System.out.print("Enter student ID: ");
+        int studentID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter club ID: ");
+        int clubID = scanner.nextInt();
+        scanner.nextLine();
+
+        String query = "UPDATE Student SET ClubID = ? WHERE StudentID = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, clubID);
+            pstmt.setInt(2, studentID);
+            pstmt.executeUpdate();
+            System.out.println("Student assigned to club successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error assigning student to club: " + e.getMessage());
+        }
+    }
 
 
 }
