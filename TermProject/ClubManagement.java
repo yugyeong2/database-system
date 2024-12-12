@@ -342,5 +342,34 @@ public class ClubManagement {
     }
 
 
+    public static void deleteStudent(Connection con, Scanner scanner) {
+        System.out.print("Enter student ID to delete: ");
+        int studentID = scanner.nextInt();
+        scanner.nextLine();
+
+        String query = "DELETE FROM Student WHERE StudentID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, studentID);
+            pstmt.executeUpdate();
+            System.out.println("Student deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting student: " + e.getMessage());
+        }
+    }
+
+    public static void deleteProfessor(Connection con, Scanner scanner) {
+        System.out.print("Enter professor ID to delete: ");
+        int professorID = scanner.nextInt();
+        scanner.nextLine();
+
+        String query = "DELETE FROM Professor WHERE ProfessorID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, professorID);
+            pstmt.executeUpdate();
+            System.out.println("Professor deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting professor: " + e.getMessage());
+        }
+    }
 
 }
