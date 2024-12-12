@@ -279,6 +279,24 @@ public class ClubManagement {
         }
     }
 
+    public static void insertClub(Connection con, Scanner scanner) {
+        System.out.print("Enter club name: ");
+        String clubName = scanner.nextLine();
+        System.out.print("Enter club room: ");
+        String clubRoom = scanner.nextLine();
+
+        String query = "INSERT INTO Club (ClubName, ClubRoom) VALUES (?, ?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, clubName);
+            pstmt.setString(2, clubRoom);
+            pstmt.executeUpdate();
+            System.out.println("Club inserted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error inserting club: " + e.getMessage());
+        }
+    }
+
 
 
 }
