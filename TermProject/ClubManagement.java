@@ -387,6 +387,10 @@ public class ClubManagement {
         }
     }
 
+    public static void deleteProject(Connection con, Scanner scanner) {
+        System.out.print("Enter project ID to delete: ");
+        int projectID = scanner.nextInt();
+        scanner.nextLine();
 
 
 }
