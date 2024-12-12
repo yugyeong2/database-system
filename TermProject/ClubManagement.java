@@ -427,5 +427,27 @@ public class ClubManagement {
         }
     }
 
+    public static void updateProfessor(Connection con, Scanner scanner) {
+        System.out.print("Enter professor ID to update: ");
+        int professorID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter new research field (leave blank to skip): ");
+        String researchField = scanner.nextLine();
+        System.out.print("Enter new office (leave blank to skip): ");
+        String office = scanner.nextLine();
+
+        String query = "UPDATE Professor SET ResearchField = COALESCE(?, ResearchField), Office = COALESCE(?, Office) WHERE ProfessorID = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, researchField.isEmpty() ? null : researchField);
+            pstmt.setString(2, office.isEmpty() ? null : office);
+            pstmt.setInt(3, professorID);
+            pstmt.executeUpdate();
+            System.out.println("Professor information updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating professor: " + e.getMessage());
+        }
+    }
+
 
 }
