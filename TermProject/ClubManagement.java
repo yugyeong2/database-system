@@ -251,6 +251,34 @@ public class ClubManagement {
         }
     }
 
+    public static void insertProfessor(Connection con, Scanner scanner) {
+        System.out.print("Enter professor name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter gender (Male/Female/Other): ");
+        String gender = scanner.nextLine();
+        System.out.print("Enter research field: ");
+        String researchField = scanner.nextLine();
+        System.out.print("Enter office: ");
+        String office = scanner.nextLine();
+
+        String query = "INSERT INTO Professor (Name, Age, Gender, ResearchField, Office) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, age);
+            pstmt.setString(3, gender);
+            pstmt.setString(4, researchField);
+            pstmt.setString(5, office);
+            pstmt.executeUpdate();
+            System.out.println("Professor inserted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error inserting professor: " + e.getMessage());
+        }
+    }
+
 
 
 }
