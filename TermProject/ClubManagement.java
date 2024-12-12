@@ -392,5 +392,15 @@ public class ClubManagement {
         int projectID = scanner.nextInt();
         scanner.nextLine();
 
+        String query = "DELETE FROM Project WHERE ProjectID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, projectID);
+            pstmt.executeUpdate();
+            System.out.println("Project deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting project: " + e.getMessage());
+        }
+    }
+
 
 }
