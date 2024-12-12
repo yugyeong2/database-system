@@ -341,6 +341,17 @@ public class ClubManagement {
         }
     }
 
+    private static void addStudentToProject(Connection con, int projectID, int studentID) {
+        String query = "INSERT INTO StudentProjects (ProjectID, StudentID) VALUES (?, ?)";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, projectID);
+            pstmt.setInt(2, studentID);
+            pstmt.executeUpdate();
+            System.out.println("Student added to project successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error adding student to project: " + e.getMessage());
+        }
+    }
 
     public static void deleteStudent(Connection con, Scanner scanner) {
         System.out.print("Enter student ID to delete: ");
