@@ -471,4 +471,32 @@ public class ClubManagement {
         }
     }
 
+    public static void updateProject(Connection con, Scanner scanner) {
+        System.out.print("Enter project ID to update: ");
+        int projectID = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        System.out.print("Enter new project name (leave blank to skip): ");
+        String projectName = scanner.nextLine();
+        System.out.print("Enter new GitHub URL (leave blank to skip): ");
+        String gitHubURL = scanner.nextLine();
+        System.out.print("Enter new deadline (YYYY-MM-DD, leave blank to skip): ");
+        String deadline = scanner.nextLine();
+        System.out.print("Enter new status (leave blank to skip): ");
+        String status = scanner.nextLine();
+
+        String query = "UPDATE Project SET ProjectName = COALESCE(?, ProjectName), GitHub = COALESCE(?, GitHub), Deadline = COALESCE(?, Deadline), Status = COALESCE(?, Status) WHERE ProjectID = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setString(1, projectName.isEmpty() ? null : projectName);
+            pstmt.setString(2, gitHubURL.isEmpty() ? null : gitHubURL);
+            pstmt.setString(3, deadline.isEmpty() ? null : deadline);
+            pstmt.setString(4, status.isEmpty() ? null : status);
+            pstmt.setInt(5, projectID);
+            pstmt.executeUpdate();
+            System.out.println("Project information updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating project: " + e.getMessage());
+        }
+    }
+
 }
